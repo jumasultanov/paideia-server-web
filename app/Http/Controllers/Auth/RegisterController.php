@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\User\AuthResource;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -70,5 +74,10 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
             'subscribe_news' => $data['subscribe_news'],
         ]);
+    }
+
+    protected function registered(Request $request, User $user)
+    {
+        return new JsonResponse(new AuthResource($user), Response::HTTP_CREATED);
     }
 }

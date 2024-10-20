@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\User\AuthResource;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class LoginController extends Controller
 {
@@ -37,4 +41,10 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
     }
+
+    protected function authenticated(Request $request, $user)
+    {
+        return new JsonResponse(new AuthResource($user), Response::HTTP_CREATED);
+    }
+
 }
